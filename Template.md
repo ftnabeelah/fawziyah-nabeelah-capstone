@@ -45,9 +45,23 @@ OpenWeather API → Fetches real-time weather data for mood entries. (https://op
 
 ### Sitemap
 
- 1. New Entry Page → Allows users to log a new mood. 
- 2. Submission successful [optional]
- 3. Dashboard Page → Lists past moods (with filtering options maybe)
+1. Home Page (Mood Submission Form)
+- Users see a dropdown to select a mood.
+- Weather is auto-fetched and displayed.
+- Clicking "Submit" saves the entry.
+
+2. Dashboard Page
+- Displays a list of past mood entries.
+- Shows a simple trend chart (last 5 moods).
+- Allows filtering entries by date range.
+
+3. Edit Entry Page
+- Users can modify a past mood entry.
+- Saves updates to the database.
+
+4. Delete Entry (Confirmation Modal)
+- Users can remove unwanted mood logs.
+
 
 ### Mockups
 
@@ -56,22 +70,15 @@ Low fidelity Wireframes
 
 ### Data
 
+The application will use a SQL database with the following structure:
 
-1. id	
-- SERIAL PRIMARY KEY	
-- Unique identifier for each mood entry
-2. date	
-- DATE NOT NULL	
-- The date of the mood entry
-3. mood	
-- VARCHAR(20) NOT NULL 
-- Mood selected by user (e.g., Happy, Neutral, Sad)
-4. temperature	
-- FLOAT	
-- Temperature at the time of entry
-5. weather_condition	
-- VARCHAR(50)	
-- Description of the weather (e.g., Sunny, Cloudy)
+| Column | Data Type | Description |
+|--------|------|-------------|
+| id | PRIMARY KEY | Unique identifier for each mood entry |
+| date | DATE NOT NULL | The date of the mood entry |
+| mood | VARCHAR(20) NOT NULL | Mood selected by user (e.g., Happy, Neutral, Sad) |
+| temperature | FLOAT | Temperature at the time of entry |
+| weather_condition | VARCHAR(50) | Description of the weather (e.g., Sunny, Cloudy) |
 
 Data Flow Example
 1. User submits a mood entry.
@@ -83,14 +90,70 @@ Data Flow Example
 
 ### Endpoints
 
-List endpoints that your server will implement, including HTTP methods, parameters, and example responses.
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| GET | /logs | Fetch all mood logs |
+| GET | /logs/:id | Fetch a single mood entry by ID |
+| GET | /logs?startDate=YYYY-MM-DD&endDate=YYYY-MM-DD | Fetch logs within a date range |
+| POST | /logs | Add a new mood entry (includes weather data) |
+| PUT | /logs/:id | Edit an existing mood entry |
+| DELETE | /logs/:id | Delete a mood entry |
+
+#### Example Requests and Responses
+
+**Example POST Request (Adding a New Mood Entry):**
+```json
+{
+  "date": "2025-03-06",
+  "mood": "Happy",
+  "temperature": 18.5,
+  "weather_condition": "Sunny"
+}
+```
+
+**Example GET Request (Fetching Logs for a Date Range):**
+```
+GET /logs?startDate=2025-03-01&endDate=2025-03-07
+```
+
+**Example Response:**
+```json
+[
+  {
+    "id": 1,
+    "date": "2025-03-01",
+    "mood": "Happy",
+    "temperature": 20.5,
+    "weather_condition": "Sunny"
+  },
+  {
+    "id": 2,
+    "date": "2025-03-03",
+    "mood": "Neutral",
+    "temperature": 15.2,
+    "weather_condition": "Cloudy"
+  }
+]
+```
 
 ## Roadmap
 
-Scope your project as a sprint. Break down the tasks that will need to be completed and map out timeframes for implementation working back from the capstone due date.
+### Week 1: Backend & API Setup
+- [ ] Set up PostgreSQL database
+- [ ] Implement Express.js API with CRUD endpoints
+- [ ] Integrate OpenWeather API
+- [ ] Test data retrieval
+
+### Week 2: Frontend & UI Development
+- [ ] Build React UI (Home Page & Dashboard)
+- [ ] Connect frontend to API (Fetch & Display Data)
+- [ ] Implement Mood Trends Chart
+- [ ] Final Testing & Deployment
 
 ---
 
 ## Future Implementations
 
-Your project will be marked based on what you committed to in the above document. Here, you can list any additional features you may complete after the MVP of your application is built, or if you have extra time before the Capstone due date.
+- Authentication → Allow multiple users with personal mood logs.
+- Mood Analytics → Provide insights on mood trends over months.
+- Dashboard and filtering if I don't complete them
